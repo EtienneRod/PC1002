@@ -1,0 +1,63 @@
+  climate:
+    - name: Pool
+      unique_id: pool
+      current_temperature_topic: "modbus4mqtt/pool/hvac"
+      current_temperature_template: "{{ value_json.temp_inlet }}"
+      fan_modes:
+        - "auto"
+        - "low"
+      fan_mode_state_topic: "modbus4mqtt/pool/hvac"
+      fan_mode_state_template: "{{ value_json.fan_mode }}"
+      fan_mode_command_topic: "modbus4mqtt/pool/hvac/fan/set"
+      icon: mdi:pool-thermometer
+      max_temp: 35
+      min_temp: 15
+      modes:
+        - "auto"
+        - "cool"
+        - "heat"
+        - "off"
+      mode_state_topic: "modbus4mqtt/pool/hvac"
+      mode_state_template: "{{ 'off' if 'off' in value_json.power else value_json.mode }}"
+      mode_command_topic: "modbus4mqtt/pool/hvac/mode/set"
+      power_command_topic: "modbus4mqtt/pool/hvac/power/set"
+      payload_off: "off"
+      payload_on: "on"
+      action_topic: "modbus4mqtt/pool/hvac"
+      action_template : >-
+        {% if value_json.condenser_current|int > 0 %}
+          {% if (value_json.temp_inlet|int < value_json.temp_outlet|int and value_json.mode == 'auto') or value_json.mode == 'heat' %}
+            heating
+          {% elif (value_json.temp_inlet|int > value_json.temp_outlet|int and value_json.mode == 'auto') or value_json.mode == 'cool' %}
+            cooling
+          {% endif %}
+        {% elif value_json.power == 'off' %}
+          off
+        {% else %}
+          idle
+        {% endif %}
+      temperature_state_topic: "modbus4mqtt/pool/hvac"
+      temperature_state_template: "{{ value_json.temp_target }}"
+      temperature_command_topic: "modbus4mqtt/pool/hvac/target/set"
+      temperature_unit: C
+      temp_step: 0.1
+
+  sensor:
+   -  name: Pool Fan Speed
+      state_topic: modbus4mqtt/pool/hvac
+      unit_of_measurement: 'RPM'
+      state_class: measurement
+      value_template: "{{ value_json.fan_speed }}"
+      icon: mdi:fan
+   -  name: Pool Ambient Temperature
+      state_topic: modbus4mqtt/pool/hvac
+      unit_of_measurement: '°C'
+      state_class: measurement
+      value_template: "{{ value_json.temp_ambient }}"
+      icon: mdi:pool-thermometer
+   -  name: Pool Outlet Temperature
+      state_topic: modbus4mqtt/pool/hvac
+      unit_of_measurement: '°C'
+      state_class: measurement
+      value_template: "{{ value_json.temp_outlet }}"
+      icon: mdi:thermometer
