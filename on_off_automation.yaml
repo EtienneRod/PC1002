@@ -1,0 +1,36 @@
+alias: Pool - Heatpump - ON/OFF
+description: Pool - ON/OFF
+mode: single
+triggers:
+  - topic: modbus4mqtt/pool/hvac/mode/set
+    payload: "off"
+    id: "off"
+    trigger: mqtt
+  - topic: modbus4mqtt/pool/hvac/mode/set
+    payload: heat
+    trigger: mqtt
+  - topic: modbus4mqtt/pool/hvac/mode/set
+    payload: cool
+    trigger: mqtt
+  - topic: modbus4mqtt/pool/hvac/mode/set
+    payload: auto
+    trigger: mqtt
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - "off"
+        sequence:
+          - metadata: {}
+            data: {}
+            target:
+              entity_id: climate.pool
+            action: climate.turn_off
+    default:
+      - metadata: {}
+        data: {}
+        target:
+          entity_id: climate.pool
+        action: climate.turn_on
