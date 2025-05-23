@@ -1,0 +1,101 @@
+ip: 172.30.30.21
+port: 9999
+update_rate: 1
+scan_batching: 1
+registers:
+  - pub_topic: "pool/hvac"
+    address: 1019
+    type: int16
+    table: 'holding'
+    pub_only_on_change: false
+    json_key: mode
+    value_map:
+      cool: 0
+      auto: 1
+      heat: 2
+  - pub_topic: "pool/hvac"
+    address: 1011
+    type: int16
+    table: 'holding'
+    pub_only_on_change: false
+    json_key: power
+    value_map:
+      off: 0
+      on: 1
+  - pub_topic: "pool/hvac"
+    address: 1136
+    type: int16
+    table: 'holding'
+    scale: 0.1
+    pub_only_on_change: false
+    json_key: temp_target
+  - pub_topic: "pool/hvac"
+    address: 2046
+    type: int16
+    table: 'holding'
+    scale: 0.1
+    pub_only_on_change: false
+    json_key: temp_inlet
+  - pub_topic: "pool/hvac"
+    address: 2047
+    type: int16
+    table: 'holding'
+    scale: 0.1
+    pub_only_on_change: false
+    json_key: temp_outlet
+  - pub_topic: "pool/hvac"
+    address: 2049
+    type: int16
+    table: 'holding'
+    scale: 0.1
+    pub_only_on_change: false
+    json_key: temp_ambient
+  - pub_topic: "pool/hvac"
+    address: 2061
+    type: int16
+    table: 'holding'
+    scale: 0.1
+    pub_only_on_change: false
+    json_key: fan_speed
+  - pub_topic: "pool/hvac"
+    address: 1076
+    type: int16
+    table: 'holding'
+    pub_only_on_change: false
+    json_key: fan_mode
+    value_map:
+      auto: 0
+      low: 1
+  - pub_topic: "pool/hvac"
+    address: 2022
+    type: int16
+    table: 'holding'
+    pub_only_on_change: false
+    json_key: condenser_current
+  - set_topic: "pool/hvac/fan/set"
+    address: 1076
+    type: int16
+    table: 'holding'
+    value_map:
+      auto: 0
+      low: 1
+  - set_topic: "pool/hvac/mode/set"
+    address: 1019
+    type: int16
+    table: 'holding'
+    value_map:
+      cool: 0
+      auto: 1
+      heat: 2
+  - set_topic: "pool/hvac/power/set"
+    address: 1011
+    type: int16
+    table: 'holding'
+    value_map:
+      off: 0
+      on: 1
+  - set_topic: "pool/hvac/target/set"
+    address: 1136
+    type: int16
+    table: 'holding'
+    scale: 0.1
